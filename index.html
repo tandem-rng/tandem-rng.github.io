@@ -86,6 +86,23 @@ td.num { font-family: var(--mono); font-weight: 500; white-space: nowrap; }
 td.num strong { color: var(--ink); font-size: 1.05rem; }
 .note { color: var(--muted); font-size: 0.9rem; margin: 1rem 0 0; }
 
+h3.sub { font-size: 1.15rem; margin: 2.5rem 0 0.75rem; scroll-margin-top: 1rem; }
+.picker { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+.picker a { text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.picker a:hover { border-color: var(--blue); }
+.picker a[aria-current="true"] { background: var(--blue); border-color: var(--blue); color: #1b1f2a; }
+.bench { table-layout: fixed; }
+.bench thead th:nth-child(1) { width: 46%; }
+.bench thead th:nth-child(2) { width: 18%; }
+.bench tr.group th { padding-top: 1.25rem; color: var(--ink); font-size: 0.95rem; border-bottom: 2px solid var(--line); }
+.bench td.draw code { font-size: 0.85rem; overflow-wrap: anywhere; }
+.bench .setup { display: block; color: var(--muted); font-size: 0.8rem; }
+.bench .base { display: block; color: var(--muted); font-size: 0.8rem; font-family: var(--mono); }
+.bench .ratio { font-family: var(--mono); font-weight: 500; white-space: nowrap; }
+.bench .ratio.win { color: var(--ink); }
+.bench .ratio.loss { color: var(--muted); }
+.bench .flag { color: var(--pink); font-weight: 600; }
+
 .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; }
 .how p { margin: 0.5rem 0 0; }
 .how h3::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; background: var(--blue); }
@@ -101,9 +118,12 @@ td.num strong { color: var(--ink); font-size: 1.05rem; }
   tbody tr { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
   td { border: 0; padding: 0; }
   td:first-child { grid-column: 1 / -1; font-weight: 600; }
-  td.num:nth-child(3)::before { content: "Tandem "; font-family: var(--sans); font-weight: 400; color: var(--muted); }
-  td:nth-child(3) { text-align: right; }
-  td:nth-child(5) { text-align: right; }
+  .headline td.num:nth-child(3)::before { content: "Tandem "; font-family: var(--sans); font-weight: 400; color: var(--muted); }
+  .headline td:nth-child(3), .headline td:nth-child(5) { text-align: right; }
+  .bench tr.group { display: block; padding: 0; border: 0; }
+  .bench tr.group th { display: block; padding: 1.25rem 0 0.4rem; }
+  .bench td:nth-child(3) { text-align: right; }
+  .bench td.draw { font-weight: 400; }
 }
 footer { padding-bottom: 3rem; color: var(--muted); font-size: 0.9rem; }
 footer div { padding-top: 2rem; border-top: 1px solid var(--line); }
@@ -220,7 +240,7 @@ tandem::fill(q, x, n, rng);         <span class="c">// USM memory on queue q</sp
 <section id="speed">
   <h2>Speed</h2>
   <div class="table-wrap">
-  <table>
+  <table class="headline">
     <thead><tr><th>draw</th><th>hardware</th><th>Tandem, GiB/s</th><th>baseline, GiB/s</th><th>source</th></tr></thead>
     <tbody>
       <tr><td>Float64 fill</td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1392</strong></td><td class="num">795 <span class="c">cuRAND Philox</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/main/docs/speed.md">tandem-cuda</a></td></tr>
@@ -231,6 +251,12 @@ tandem::fill(q, x, n, rng);         <span class="c">// USM memory on queue q</sp
   </table>
   </div>
   <p class="note">GiB/s written to memory. The A100 fill runs at the card's memory bandwidth. Each source gives the method, sizes and more rows.</p>
+
+  <h3 class="sub" id="bench">Every port</h3>
+  <nav class="picker" id="bench-picker" aria-label="Port"></nav>
+  <div class="table-wrap"><table class="bench" id="bench-table"></table></div>
+  <p class="note" id="bench-notes"></p>
+  <noscript><p class="note">The per-port tables need JavaScript. The figures are in <a href="data/benchmarks.json">data/benchmarks.json</a>.</p></noscript>
 </section>
 
 <section id="how">
@@ -265,5 +291,6 @@ tandem::fill(q, x, n, rng);         <span class="c">// USM memory on queue q</sp
   <p>Portions of the code were generated with the assistance of LLMs.</p>
   <p>Copyright 2026 Jessica Cox. <a href="https://github.com/tandem-rng/tandem-rng.github.io/blob/main/LICENSE">Apache 2.0 license</a>.</p>
 </div></footer>
+<script src="assets/bench.js" defer></script>
 </body>
 </html>
