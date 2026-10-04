@@ -22,6 +22,7 @@
 | `unit`, `value` | instead of `gib_s` when the source uses another unit, for example `ns per value`. A unit that starts with `ns` counts as faster when smaller |
 | `baseline` | optional `{ name, gib_s, gib_s_max }`, or `{ name, value }` in the row's `unit` |
 | `f64_normal` | `true` on Float64 normal rows |
+| `ziggurat` | `true` once a Float64 normal row is measured with the ziggurat. The page marks the other Float64 normal rows as pending |
 | `source` | `{ path, commit }`. The commit is the port's `origin/main` short hash when you read the file |
 
 ## Add a port
@@ -40,8 +41,10 @@ No page change is needed. Add only public repos.
 3. Run the check below. Then render the page at 1280 px and 400 px in both themes.
 
 Float64 normals are moving from Box-Muller to the ziggurat of SPEC.md Appendix A, tandem-c and tandem-cuda first.
-Refresh every row with `f64_normal: true` when its port lands the change.
-Keep the flag afterwards, so the next refresh can find the rows.
+Refresh every row with `f64_normal: true` when its port lands the change. Set `ziggurat: true`
+on the row, add "ziggurat" to its `setup`, and point `source` at the commit whose docs carry the
+new figure. That can be the docs commit after the code commit.
+Keep `f64_normal`, so the next refresh can find the rows.
 
 ## Check
 

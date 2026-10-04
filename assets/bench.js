@@ -16,7 +16,11 @@
 
   const ports = new Map(data.ports.map((p) => [p.id, p]));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  const fmt = (lo, hi) => (hi == null || hi === lo ? `${lo}` : `${lo}–${hi}`);
+  // Float64 normal rows still measured with Box-Muller, before the ziggurat landed in that port.
+  const pending = (r) => r.f64_normal && !r.ziggurat;
+  // JSON drops a trailing zero, and the sources print whole numbers below 10 as 7.0.
+  const num = (x) => (Number.isInteger(x) && x < 10 ? x.toFixed(1) : `${x}`);
+  const fmt = (lo, hi) => (hi == null || hi === lo ? num(lo) : `${num(lo)}–${num(hi)}`);
 
   picker.innerHTML = data.ports
     .filter((p) => data.rows.some((r) => r.port === p.id))
@@ -41,7 +45,7 @@
     for (const [hw, list] of groups) {
       html += `<tr class="group"><th colspan="3">${esc(hw)}</th></tr>`;
       for (const r of list) {
-        const flag = r.f64_normal ? ` <span class="flag" title="Float64 normal, refresh pending">*</span>` : "";
+        const flag = pending(r) ? ` <span class="flag" title="Float64 normal, refresh pending">*</span>` : "";
         // Rows in a time unit, such as ns per value, are faster when smaller.
         const lowerBetter = unitOf(r).startsWith("ns");
         const v = r.gib_s ?? r.value;
@@ -63,7 +67,7 @@
       const [path, commit] = s.split("@");
       return `<a href="https://github.com/tandem-rng/${esc(port.repo)}/blob/${esc(commit)}/${esc(path)}">${esc(port.repo)}/${esc(path)} at ${esc(commit)}</a>`;
     });
-    const flagged = rows.some((r) => r.f64_normal)
+    const flagged = rows.some(pending)
       ? ` <span class="flag">*</span> Float64 normals move to a ziggurat, so these rows will change.`
       : "";
     const review = port.review ? `<strong>${esc(port.review)}</strong> ` : "";
