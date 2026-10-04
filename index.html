@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tandem rng</title>
+<meta name="description" content="Tandem8x32: one pseudorandom stream, bit exact in fourteen languages, fast on CPUs and GPUs.">
+<meta name="theme-color" content="#fbf7f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#232a3a" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="tandem rng">
+<meta property="og:description" content="One generator, every language.">
+<meta property="og:image" content="https://tandem-rng.github.io/assets/banner-org-slate.png">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Sora:wght@400;600&display=swap">
+<style>
+:root {
+  color-scheme: light dark;
+  --blue: #7fb3ee;
+  --pink: #ee8db0;
+  --cream: #fbf7f2;
+  --slate: #232a3a;
+  --ground: var(--cream);
+  --ink: #1b1f2a;
+  --muted: #5b6070;
+  --surface: #ffffff;
+  --line: #e6dfd5;
+  --code: #f4eee6;
+  --sans: Sora, "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: var(--slate);
+    --ink: #eef0ea;
+    --muted: #a9afbd;
+    --surface: #2b3346;
+    --line: #3a4358;
+    --code: #1c2230;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font: 400 16px/1.6 var(--sans);
+}
+main, footer { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+h2 { font-size: 1.5rem; margin: 0 0 1rem; }
+h3 { font-size: 1rem; margin: 0; }
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--blue); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--pink); }
+code, pre { font-family: var(--mono); font-weight: 500; }
+code { font-size: 0.9em; }
+section { padding: 3rem 0; border-top: 1px solid var(--line); }
+
+.hero { padding: 4.5rem 0 3.5rem; border-top: 0; }
+.lockup { display: flex; align-items: center; gap: 18px; }
+.lockup svg { width: 88px; height: 88px; flex: none; }
+.lockup h1 { font-size: clamp(2.6rem, 9vw, 4.2rem); margin: 0; letter-spacing: -0.03em; }
+.lockup h1 span { color: var(--pink); }
+.tagline { font-size: clamp(1.3rem, 4vw, 1.7rem); font-weight: 600; margin: 2rem 0 0.75rem; letter-spacing: -0.01em; }
+.lede { max-width: 42rem; margin: 0; color: var(--muted); font-size: 1.1rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2rem; }
+.cta a { text-decoration: none; padding: 0.55rem 1.1rem; border-radius: 6px; font-weight: 600; border: 2px solid var(--blue); }
+.cta a:first-child { background: var(--blue); color: #1b1f2a; }
+.cta a:hover { border-color: var(--pink); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 14px 12px; min-width: 0; display: flex; flex-direction: column; }
+.card header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+.card header a { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.card pre { margin: 0; flex: 1; background: var(--code); border-radius: 6px; padding: 10px 12px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.sh { color: var(--muted); }
+.c { color: var(--muted); }
+
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; padding: 0.55rem 0.75rem 0.55rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; font-size: 0.85rem; color: var(--muted); }
+td.num { font-family: var(--mono); font-weight: 500; white-space: nowrap; }
+td.num strong { color: var(--ink); font-size: 1.05rem; }
+.note { color: var(--muted); font-size: 0.9rem; margin: 1rem 0 0; }
+
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; }
+.how p { margin: 0.5rem 0 0; }
+.how h3::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; background: var(--blue); }
+.how div:nth-child(2) h3::before { background: var(--pink); }
+
+.links ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 12px 28px; font-weight: 600; }
+@media (max-width: 640px) {
+  .hero { padding-top: 3rem; }
+  .lockup svg { width: 64px; height: 64px; }
+  /* Aligned trailing comments wrap badly at phone width. */
+  .card pre .c { display: none; }
+  thead { display: none; }
+  tbody tr { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+  td { border: 0; padding: 0; }
+  td:first-child { grid-column: 1 / -1; font-weight: 600; }
+  td.num:nth-child(3)::before { content: "Tandem "; font-family: var(--sans); font-weight: 400; color: var(--muted); }
+  td:nth-child(3) { text-align: right; }
+  td:nth-child(5) { text-align: right; }
+}
+footer { padding-bottom: 3rem; color: var(--muted); font-size: 0.9rem; }
+footer div { padding-top: 2rem; border-top: 1px solid var(--line); }
+footer p { margin: 0.25rem 0; }
+</style>
+</head>
+<body>
+<main>
+
+<section class="hero">
+  <div class="lockup">
+    <svg viewBox="0 0 64 64" role="img" aria-label="Twin T mark"><path d="M8 12 H40 M24 12 V52" fill="none" stroke="#7fb3ee" stroke-width="8" stroke-linecap="square"/><path d="M24 52 H56 M40 52 V12" fill="none" stroke="#ee8db0" stroke-width="8" stroke-linecap="square"/></svg>
+    <h1>tandem <span>rng</span></h1>
+  </div>
+  <p class="tagline">One generator, every language.</p>
+  <p class="lede">Tandem8x32 is a noncryptographic pseudorandom number generator with one specified stream that fourteen ports reproduce bit for bit, fast on CPUs and GPUs alike.</p>
+  <div class="cta">
+    <a href="#languages">Pick your language</a>
+    <a href="https://github.com/tandem-rng/spec/blob/main/SPEC.md">Read the specification</a>
+  </div>
+</section>
+
+<section id="languages">
+  <h2>Pick your language</h2>
+  <div class="grid">
+
+<article class="card"><header><h3>Julia</h3><a href="https://github.com/tandem-rng/TandemRNG.jl">TandemRNG.jl</a></header>
+<pre><code>using Pkg; Pkg.add(url="https://github.com/tandem-rng/TandemRNG.jl")
+using TandemRNG
+rng = Tandem8x32(42)
+x, rng = rand_next(rng, Float64)    <span class="c"># value and next generator</span></code></pre></article>
+
+<article class="card"><header><h3>C and C++</h3><a href="https://github.com/tandem-rng/tandem-c">tandem-c</a></header>
+<pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-c &amp;&amp; make -C tandem-c</span>
+#include "tandem.h"
+tandem_rng rng = tandem_seed(42, 0, 0);
+double x = tandem_next_f64(&amp;rng);</code></pre></article>
+
+<article class="card"><header><h3>Rust</h3><a href="https://github.com/tandem-rng/tandem-rs">tandem-rs</a></header>
+<pre><code><span class="sh">$ cargo add tandem-rng --git https://github.com/tandem-rng/tandem-rs</span>
+let mut rng = tandem_rng::Tandem::new(42);
+let x = rng.next_f64();
+let worker = rng.split(7);          <span class="c">// by index, from the key</span></code></pre></article>
+
+<article class="card"><header><h3>Python, NumPy</h3><a href="https://github.com/tandem-rng/tandem-numpy">tandem-numpy</a></header>
+<pre><code><span class="sh">$ pip install git+https://github.com/tandem-rng/tandem-numpy</span>
+from tandem_rng import TandemGenerator
+g = TandemGenerator(42)
+z = g.standard_normal(10**6)</code></pre></article>
+
+<article class="card"><header><h3>CUDA</h3><a href="https://github.com/tandem-rng/tandem-cuda">tandem-cuda</a></header>
+<pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-cuda</span>
+#include "tandem.cuh"
+auto g = tandem::generator::seed(42);
+g.fill_f64(x, n);                   <span class="c">// x in device memory</span></code></pre></article>
+
+<article class="card"><header><h3>JAX</h3><a href="https://github.com/tandem-rng/tandem-jax">tandem-jax</a></header>
+<pre><code><span class="sh">$ pip install git+https://github.com/tandem-rng/tandem-jax</span>
+import jax, tandem_jax as tj
+key = tj.key(42)
+z = jax.random.normal(key, (1000,)) <span class="c"># any jax.random function</span></code></pre></article>
+
+<article class="card"><header><h3>R</h3><a href="https://github.com/tandem-rng/tandem-r">tandem-r</a></header>
+<pre><code>remotes::install_github("tandem-rng/tandem-r")
+library(tandemrng)
+rng &lt;- tandem(42)
+u &lt;- tandem_runif(rng, 1e6)</code></pre></article>
+
+<article class="card"><header><h3>PyTorch</h3><a href="https://github.com/tandem-rng/tandem-torch">tandem-torch</a></header>
+<pre><code><span class="sh">$ pip install --no-build-isolation git+https://github.com/tandem-rng/tandem-torch</span>
+from tandem_torch import Tandem
+t = Tandem(42)
+z = t.randn(1000)                   <span class="c"># also device="cuda"</span></code></pre></article>
+
+<article class="card"><header><h3>JavaScript, WebGPU</h3><a href="https://github.com/tandem-rng/tandem-webgpu">tandem-webgpu</a></header>
+<pre><code><span class="sh">$ npm install github:tandem-rng/tandem-webgpu</span>
+import { seed, Tandem } from "tandem-webgpu";
+const rng = new Tandem(seed(42n));
+const xs = rng.fillF64(1 &lt;&lt; 20);</code></pre></article>
+
+<article class="card"><header><h3>Fortran</h3><a href="https://github.com/tandem-rng/tandem-fortran">tandem-fortran</a></header>
+<pre><code><span class="sh">! fpm.toml: tandem_rng = { git = "https://github.com/tandem-rng/tandem-fortran" }</span>
+use tandem_rng
+rng = tandem_new(42_int64)
+x = rng%next_real64()</code></pre></article>
+
+<article class="card"><header><h3>Kokkos</h3><a href="https://github.com/tandem-rng/tandem-kokkos">tandem-kokkos</a></header>
+<pre><code><span class="sh">$ git clone --recurse-submodules https://github.com/tandem-rng/tandem-kokkos</span>
+#include &lt;tandem/kokkos.hpp&gt;
+tandem::Rng rng(42);
+tandem::fill(x, rng);               <span class="c">// any contiguous View</span></code></pre></article>
+
+<article class="card"><header><h3>Java</h3><a href="https://github.com/tandem-rng/tandem-java">tandem-java</a></header>
+<pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-java &amp;&amp; mvn -f tandem-java install</span>
+Tandem rng = Tandem.seed(42);
+double x = rng.nextDouble();
+Tandem worker = rng.split(7);</code></pre></article>
+
+<article class="card"><header><h3>Mojo</h3><a href="https://github.com/tandem-rng/tandem-mojo">tandem-mojo</a></header>
+<pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-mojo &amp;&amp; cd tandem-mojo &amp;&amp; pixi install</span>
+from tandem import Tandem
+var rng = Tandem(42)
+var x = rng.next_f64()</code></pre></article>
+
+<article class="card"><header><h3>SYCL</h3><a href="https://github.com/tandem-rng/tandem-sycl">tandem-sycl</a></header>
+<pre><code><span class="sh">$ git clone --recurse-submodules https://github.com/tandem-rng/tandem-sycl</span>
+#include &lt;tandem/sycl.hpp&gt;
+tandem::Rng rng(42);
+tandem::fill(q, x, n, rng);         <span class="c">// USM memory on queue q</span></code></pre></article>
+
+  </div>
+</section>
+
+<section id="speed">
+  <h2>Speed</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>draw</th><th>hardware</th><th>Tandem, GiB/s</th><th>baseline, GiB/s</th><th>source</th></tr></thead>
+    <tbody>
+      <tr><td>Float64 fill</td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1392</strong></td><td class="num">795 <span class="c">cuRAND Philox</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/main/docs/speed.md">tandem-cuda</a></td></tr>
+      <tr><td><code>randn</code> float32</td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1255</strong></td><td class="num">913 <span class="c">torch.randn</span></td><td><a href="https://github.com/tandem-rng/tandem-torch">tandem-torch</a></td></tr>
+      <tr><td>Float64 fill, one thread</td><td>Apple M4</td><td class="num"><strong>17.5</strong></td><td class="num">3.1 <span class="c">std::mt19937_64</span></td><td><a href="https://github.com/tandem-rng/tandem-c/blob/main/docs/speed.md">tandem-c</a></td></tr>
+      <tr><td><code>standard_normal</code> float64, one thread</td><td>Apple M4</td><td class="num"><strong>4.9</strong></td><td class="num">2.0 <span class="c">NumPy PCG64</span></td><td><a href="https://github.com/tandem-rng/tandem-numpy">tandem-numpy</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">GiB/s written to memory. The A100 fill runs at the card's memory bandwidth. Each source gives the method, sizes and more rows.</p>
+</section>
+
+<section id="how">
+  <h2>How it works</h2>
+  <div class="how">
+    <div>
+      <h3>Eight 32-bit words</h3>
+      <p>The state is two halves of four words. The hidden half runs a bijective clock and takes feedback from the exposed half. The exposed half is a Philox-shaped Feistel step whose multipliers come from the hidden half. Each step emits the 128 exposed bits.</p>
+    </div>
+    <div>
+      <h3>Split, fork, purpose</h3>
+      <p>A keyed seeding function starts every chunk of 32 steps, and eight chunks interleave into one 1024-bit row, so eight GPU lanes write one contiguous row. <code>split(i)</code> derives a child from the key and an index, <code>fork(n)</code> a batch from the current block, and <code>purpose(u)</code> a named sub-stream. A child costs at most one seeding.</p>
+    </div>
+    <div>
+      <h3>Element i is draw i</h3>
+      <p>Element <code>i</code> of a fill equals draw <code>i</code>, so any split across threads, ranks or GPUs reproduces a serial run. Bounded integers, normals and exponentials follow one shared appendix, so the ports agree on those too.</p>
+    </div>
+  </div>
+</section>
+
+<section class="links">
+  <h2>Links</h2>
+  <ul>
+    <li><a href="https://github.com/tandem-rng/spec/blob/main/SPEC.md">Specification</a></li>
+    <li><a href="https://github.com/tandem-rng/spec/blob/main/SPEC.md#appendix-b-parallel-decomposition-non-normative">Parallel use</a></li>
+    <li><a href="https://github.com/tandem-rng">GitHub organization</a></li>
+  </ul>
+</section>
+
+</main>
+<footer><div>
+  <p>Portions of the code were generated with the assistance of LLMs.</p>
+  <p>Copyright 2026 Jessica Cox. <a href="https://github.com/tandem-rng/tandem-rng.github.io/blob/main/LICENSE">Apache 2.0 license</a>.</p>
+</div></footer>
+</body>
+</html>
