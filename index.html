@@ -74,6 +74,7 @@ section { padding: 3rem 0; border-top: 1px solid var(--line); }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 14px 12px; min-width: 0; display: flex; flex-direction: column; }
 .card header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
 .card header a { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.card header .refs { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 14px; }
 .card pre { margin: 0; flex: 1; background: var(--code); border-radius: 6px; padding: 10px 12px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
 .sh { color: var(--muted); }
 .c { color: var(--muted); }
@@ -150,31 +151,31 @@ footer p { margin: 0.25rem 0; }
   <h2>Pick your language</h2>
   <div class="grid">
 
-<article class="card"><header><h3>Julia</h3><a href="https://github.com/tandem-rng/TandemRNG.jl">TandemRNG.jl</a></header>
+<article class="card"><header><h3>Julia</h3><span class="refs"><a href="https://tandem-rng.github.io/TandemRNG.jl/">Docs</a><a href="https://github.com/tandem-rng/TandemRNG.jl">TandemRNG.jl</a></span></header>
 <pre><code>using Pkg; Pkg.add(url="https://github.com/tandem-rng/TandemRNG.jl")
 using TandemRNG
 rng = Tandem8x32(42)
 x, rng = rand_next(rng, Float64)    <span class="c"># value and next generator</span></code></pre></article>
 
-<article class="card"><header><h3>C and C++</h3><a href="https://github.com/tandem-rng/tandem-c">tandem-c</a></header>
+<article class="card"><header><h3>C and C++</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-c/">Docs</a><a href="https://github.com/tandem-rng/tandem-c">tandem-c</a></span></header>
 <pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-c &amp;&amp; make -C tandem-c</span>
 #include "tandem.h"
 tandem_rng rng = tandem_seed(42, 0, 0);
 double x = tandem_next_f64(&amp;rng);</code></pre></article>
 
-<article class="card"><header><h3>Rust</h3><a href="https://github.com/tandem-rng/tandem-rs">tandem-rs</a></header>
+<article class="card"><header><h3>Rust</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-rs/">Docs</a><a href="https://github.com/tandem-rng/tandem-rs">tandem-rs</a></span></header>
 <pre><code><span class="sh">$ cargo add tandem-rng --git https://github.com/tandem-rng/tandem-rs</span>
 let mut rng = tandem_rng::Tandem::new(42);
 let x = rng.next_f64();
 let worker = rng.split(7);          <span class="c">// by index, from the key</span></code></pre></article>
 
-<article class="card"><header><h3>Python, NumPy</h3><a href="https://github.com/tandem-rng/tandem-numpy">tandem-numpy</a></header>
+<article class="card"><header><h3>Python, NumPy</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-numpy/">Docs</a><a href="https://github.com/tandem-rng/tandem-numpy">tandem-numpy</a></span></header>
 <pre><code><span class="sh">$ pip install git+https://github.com/tandem-rng/tandem-numpy</span>
 from tandem_rng import TandemGenerator
 g = TandemGenerator(42)
 z = g.standard_normal(10**6)</code></pre></article>
 
-<article class="card"><header><h3>CUDA</h3><a href="https://github.com/tandem-rng/tandem-cuda">tandem-cuda</a></header>
+<article class="card"><header><h3>CUDA</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-cuda/">Docs</a><a href="https://github.com/tandem-rng/tandem-cuda">tandem-cuda</a></span></header>
 <pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-cuda</span>
 #include "tandem.cuh"
 auto g = tandem::generator::seed(42);
@@ -186,73 +187,73 @@ import jax, tandem_jax as tj
 key = tj.key(42)
 z = jax.random.normal(key, (1000,)) <span class="c"># any jax.random function</span></code></pre></article>
 
-<article class="card"><header><h3>R</h3><a href="https://github.com/tandem-rng/tandem-r">tandem-r</a></header>
+<article class="card"><header><h3>R</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-r/">Docs</a><a href="https://github.com/tandem-rng/tandem-r">tandem-r</a></span></header>
 <pre><code>remotes::install_github("tandem-rng/tandem-r")
 library(tandemrng)
 rng &lt;- tandem(42)
 u &lt;- tandem_runif(rng, 1e6)</code></pre></article>
 
-<article class="card"><header><h3>PyTorch</h3><a href="https://github.com/tandem-rng/tandem-torch">tandem-torch</a></header>
+<article class="card"><header><h3>PyTorch</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-torch/">Docs</a><a href="https://github.com/tandem-rng/tandem-torch">tandem-torch</a></span></header>
 <pre><code><span class="sh">$ pip install --no-build-isolation git+https://github.com/tandem-rng/tandem-torch</span>
 from tandem_torch import Tandem
 t = Tandem(42)
 z = t.randn(1000)                   <span class="c"># also device="cuda"</span></code></pre></article>
 
-<article class="card"><header><h3>JavaScript, WebGPU</h3><a href="https://github.com/tandem-rng/tandem-webgpu">tandem-webgpu</a></header>
+<article class="card"><header><h3>JavaScript, WebGPU</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-webgpu/">Docs</a><a href="https://github.com/tandem-rng/tandem-webgpu">tandem-webgpu</a></span></header>
 <pre><code><span class="sh">$ npm install github:tandem-rng/tandem-webgpu</span>
 import { seed, Tandem } from "tandem-webgpu";
 const rng = new Tandem(seed(42n));
 const xs = rng.fillF64(1 &lt;&lt; 20);</code></pre></article>
 
-<article class="card"><header><h3>Fortran</h3><a href="https://github.com/tandem-rng/tandem-fortran">tandem-fortran</a></header>
+<article class="card"><header><h3>Fortran</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-fortran/">Docs</a><a href="https://github.com/tandem-rng/tandem-fortran">tandem-fortran</a></span></header>
 <pre><code><span class="sh">! fpm.toml: tandem_rng = { git = "https://github.com/tandem-rng/tandem-fortran" }</span>
 use tandem_rng
 rng = tandem_new(42_int64)
 x = rng%next_real64()</code></pre></article>
 
-<article class="card"><header><h3>Kokkos</h3><a href="https://github.com/tandem-rng/tandem-kokkos">tandem-kokkos</a></header>
+<article class="card"><header><h3>Kokkos</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-kokkos/">Docs</a><a href="https://github.com/tandem-rng/tandem-kokkos">tandem-kokkos</a></span></header>
 <pre><code><span class="sh">$ git clone --recurse-submodules https://github.com/tandem-rng/tandem-kokkos</span>
 #include &lt;tandem/kokkos.hpp&gt;
 tandem::Rng rng(42);
 tandem::fill(x, rng);               <span class="c">// any contiguous View</span></code></pre></article>
 
-<article class="card"><header><h3>Java</h3><a href="https://github.com/tandem-rng/tandem-java">tandem-java</a></header>
+<article class="card"><header><h3>Java</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-java/">Docs</a><a href="https://github.com/tandem-rng/tandem-java">tandem-java</a></span></header>
 <pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-java &amp;&amp; mvn -f tandem-java install</span>
 Tandem rng = Tandem.seed(42);
 double x = rng.nextDouble();
 Tandem worker = rng.split(7);</code></pre></article>
 
-<article class="card"><header><h3>Mojo</h3><a href="https://github.com/tandem-rng/tandem-mojo">tandem-mojo</a></header>
+<article class="card"><header><h3>Mojo</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-mojo/">Docs</a><a href="https://github.com/tandem-rng/tandem-mojo">tandem-mojo</a></span></header>
 <pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-mojo &amp;&amp; cd tandem-mojo &amp;&amp; pixi install</span>
 from tandem import Tandem
 var rng = Tandem(42)
 var x = rng.next_f64()</code></pre></article>
 
-<article class="card"><header><h3>SYCL</h3><a href="https://github.com/tandem-rng/tandem-sycl">tandem-sycl</a></header>
+<article class="card"><header><h3>SYCL</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-sycl/">Docs</a><a href="https://github.com/tandem-rng/tandem-sycl">tandem-sycl</a></span></header>
 <pre><code><span class="sh">$ git clone --recurse-submodules https://github.com/tandem-rng/tandem-sycl</span>
 #include &lt;tandem/sycl.hpp&gt;
 tandem::Rng rng(42);
 tandem::fill(q, x, n, rng);         <span class="c">// USM memory on queue q</span></code></pre></article>
 
-<article class="card"><header><h3>Swift, Metal</h3><a href="https://github.com/tandem-rng/tandem-metal">tandem-metal</a></header>
+<article class="card"><header><h3>Swift, Metal</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-metal/">Docs</a><a href="https://github.com/tandem-rng/tandem-metal">tandem-metal</a></span></header>
 <pre><code><span class="sh">// Package.swift: .package(url: "https://github.com/tandem-rng/tandem-metal", branch: "main")</span>
 import Tandem
 var rng = Tandem(seed: 42)
 let x = rng.nextF64()               <span class="c">// GPU fills take a Metal buffer</span></code></pre></article>
 
-<article class="card"><header><h3>MLX</h3><a href="https://github.com/tandem-rng/tandem-mlx">tandem-mlx</a></header>
+<article class="card"><header><h3>MLX</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-mlx/">Docs</a><a href="https://github.com/tandem-rng/tandem-mlx">tandem-mlx</a></span></header>
 <pre><code><span class="sh">$ pip install git+https://github.com/tandem-rng/tandem-mlx</span>
 import mlx.core as mx, tandem_mlx as tm
 key = tm.key(42)
 z = tm.normal(key, (1000,))         <span class="c"># Metal kernel on the GPU</span></code></pre></article>
 
-<article class="card"><header><h3>Haskell</h3><a href="https://github.com/tandem-rng/tandem-hs">tandem-hs</a></header>
+<article class="card"><header><h3>Haskell</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-hs/">Docs</a><a href="https://github.com/tandem-rng/tandem-hs">tandem-hs</a></span></header>
 <pre><code><span class="sh">-- cabal.project: source-repository-package, location: https://github.com/tandem-rng/tandem-hs</span>
 import System.Random.Tandem qualified as T
 let g0 = T.seed 42
     (x, g1) = T.nextDouble g0       <span class="c">-- value and next generator</span></code></pre></article>
 
-<article class="card"><header><h3>OCaml</h3><a href="https://github.com/tandem-rng/tandem-ml">tandem-ml</a></header>
+<article class="card"><header><h3>OCaml</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-ml/">Docs</a><a href="https://github.com/tandem-rng/tandem-ml">tandem-ml</a></span></header>
 <pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-ml &amp;&amp; cd tandem-ml &amp;&amp; opam install . &amp;&amp; dune build</span>
 let g = Tandem.seed 42
 let x, g = Tandem.float g
