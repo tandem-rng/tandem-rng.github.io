@@ -19,7 +19,8 @@
 | `kind` | `uniform`, `bits`, `bounded`, `normal` or `exponential` |
 | `setup` | threads, element count, toolchain, as the source gives them |
 | `gib_s`, `gib_s_max` | GiB/s written. Use `gib_s_max` for a range |
-| `baseline` | optional `{ name, gib_s, gib_s_max }` |
+| `unit`, `value` | instead of `gib_s` when the source uses another unit, for example `ns per value`. A unit that starts with `ns` counts as faster when smaller |
+| `baseline` | optional `{ name, gib_s, gib_s_max }`, or `{ name, value }` in the row's `unit` |
 | `f64_normal` | `true` on Float64 normal rows |
 | `source` | `{ path, commit }`. The commit is the port's `origin/main` short hash when you read the file |
 
@@ -27,14 +28,15 @@
 
 1. Add `{ "id", "name", "repo" }` to `ports`. `repo` is the name under github.com/tandem-rng.
 2. Add its rows. The picker shows a port only when it has rows.
+3. For a port under review, add `"review"` with one sentence. The page shows it above the sources.
+   Remove it when the review closes.
 
-No page change is needed.
-tandem-metal, tandem-mlx, tandem-hs and tandem-ml stay out until their repos are public.
+No page change is needed. Add only public repos.
 
 ## Refresh rows
 
 1. Run `git fetch` in the port checkout and read the speed doc at `origin/main`.
-2. Update `gib_s`, `baseline` and `source.commit` together. Update `source.path` when the doc moved.
+2. Update `gib_s` or `value`, `baseline` and `source.commit` together. Update `source.path` when the doc moved.
 3. Run the check below. Then render the page at 1280 px and 400 px in both themes.
 
 Float64 normals are moving from Box-Muller to the ziggurat of SPEC.md Appendix A, tandem-c and tandem-cuda first.
@@ -47,7 +49,8 @@ Run this in the directory above the port checkouts. It prints each number that i
 
 ```sh
 jq -r '(.ports|map({(.id):.repo})|add) as $R | .rows[] | . as $x
-  | [$x.gib_s, $x.gib_s_max, $x.baseline.gib_s, $x.baseline.gib_s_max][] | select(. != null)
+  | [$x.gib_s, $x.gib_s_max, $x.value, $x.baseline.gib_s, $x.baseline.gib_s_max, $x.baseline.value][]
+  | select(. != null)
   | [$R[$x.port], $x.source.commit, $x.source.path, tostring] | @tsv' \
   tandem-rng.github.io/data/benchmarks.json |
 while IFS=$'\t' read -r repo commit file value; do

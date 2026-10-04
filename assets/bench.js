@@ -28,25 +28,33 @@
     for (const a of picker.querySelectorAll("a")) a.setAttribute("aria-current", String(a.dataset.port === id));
 
     const rows = data.rows.filter((r) => r.port === id);
+    const unitOf = (r) => r.unit ?? data.unit;
+    const units = new Set(rows.map(unitOf));
+    const oneUnit = units.size === 1 ? [...units][0] : null;
     const groups = new Map();
     for (const r of rows) {
       if (!groups.has(r.hardware)) groups.set(r.hardware, []);
       groups.get(r.hardware).push(r);
     }
 
-    let html = `<thead><tr><th>draw</th><th>Tandem, ${esc(data.unit)}</th><th>baseline</th></tr></thead><tbody>`;
+    let html = `<thead><tr><th>draw</th><th>Tandem${oneUnit ? `, ${esc(oneUnit)}` : ""}</th><th>baseline</th></tr></thead><tbody>`;
     for (const [hw, list] of groups) {
       html += `<tr class="group"><th colspan="3">${esc(hw)}</th></tr>`;
       for (const r of list) {
         const flag = r.f64_normal ? ` <span class="flag" title="Float64 normal, refresh pending">*</span>` : "";
+        // Rows in a time unit, such as ns per value, are faster when smaller.
+        const lowerBetter = unitOf(r).startsWith("ns");
+        const v = r.gib_s ?? r.value;
+        const suffix = oneUnit ? "" : ` <span class="c">${esc(unitOf(r))}</span>`;
         let base = `<span class="c" title="no baseline in the source">–</span>`;
         if (r.baseline) {
-          const ratio = r.gib_s / r.baseline.gib_s;
+          const b = r.baseline.gib_s ?? r.baseline.value;
+          const ratio = lowerBetter ? b / v : v / b;
           const cls = ratio >= 1 ? "win" : "loss";
-          base = `<span class="ratio ${cls}">${ratio.toFixed(ratio >= 10 ? 0 : 2)}×</span> <span class="base">${esc(r.baseline.name)}, ${fmt(r.baseline.gib_s, r.baseline.gib_s_max)}</span>`;
+          base = `<span class="ratio ${cls}">${ratio.toFixed(ratio >= 10 ? 0 : 2)}×</span> <span class="base">${esc(r.baseline.name)}, ${fmt(b, r.baseline.gib_s_max)}</span>`;
         }
         html += `<tr><td class="draw"><code>${esc(r.draw)}</code>${flag}<span class="setup">${esc(r.setup)}</span></td>`
-          + `<td class="num"><strong>${fmt(r.gib_s, r.gib_s_max)}</strong></td><td>${base}</td></tr>`;
+          + `<td class="num"><strong>${fmt(v, r.gib_s_max)}</strong>${suffix}</td><td>${base}</td></tr>`;
       }
     }
     table.innerHTML = html + "</tbody>";
@@ -58,7 +66,8 @@
     const flagged = rows.some((r) => r.f64_normal)
       ? ` <span class="flag">*</span> Float64 normals move to a ziggurat, so these rows will change.`
       : "";
-    notes.innerHTML = `Source: ${sources.join(", ")}. The ratio is Tandem over the baseline on the same hardware.${flagged}`;
+    const review = port.review ? `<strong>${esc(port.review)}</strong> ` : "";
+    notes.innerHTML = `${review}Source: ${sources.join(", ")}. The ratio is how many times faster Tandem runs than the baseline on the same hardware.${flagged}`;
   }
 
   function fromHash(scroll) {

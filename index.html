@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>tandem rng</title>
-<meta name="description" content="Tandem8x32: one pseudorandom stream, bit exact in fourteen languages, fast on CPUs and GPUs.">
+<meta name="description" content="Tandem8x32: one pseudorandom stream, bit exact in eighteen ports, fast on CPUs and GPUs.">
 <meta name="theme-color" content="#fbf7f2" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#232a3a" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="tandem rng">
@@ -139,7 +139,7 @@ footer p { margin: 0.25rem 0; }
     <h1>tandem <span>rng</span></h1>
   </div>
   <p class="tagline">One generator, every language.</p>
-  <p class="lede">Tandem8x32 is a noncryptographic pseudorandom number generator with one specified stream that fourteen ports reproduce bit for bit, fast on CPUs and GPUs alike.</p>
+  <p class="lede">Tandem8x32 is a noncryptographic pseudorandom number generator with one specified stream that eighteen ports reproduce bit for bit, fast on CPUs and GPUs alike.</p>
   <div class="cta">
     <a href="#languages">Pick your language</a>
     <a href="https://github.com/tandem-rng/spec/blob/main/SPEC.md">Read the specification</a>
@@ -233,6 +233,30 @@ var x = rng.next_f64()</code></pre></article>
 #include &lt;tandem/sycl.hpp&gt;
 tandem::Rng rng(42);
 tandem::fill(q, x, n, rng);         <span class="c">// USM memory on queue q</span></code></pre></article>
+
+<article class="card"><header><h3>Swift, Metal</h3><a href="https://github.com/tandem-rng/tandem-metal">tandem-metal</a></header>
+<pre><code><span class="sh">// Package.swift: .package(url: "https://github.com/tandem-rng/tandem-metal", branch: "main")</span>
+import Tandem
+var rng = Tandem(seed: 42)
+let x = rng.nextF64()               <span class="c">// GPU fills take a Metal buffer</span></code></pre></article>
+
+<article class="card"><header><h3>MLX</h3><a href="https://github.com/tandem-rng/tandem-mlx">tandem-mlx</a></header>
+<pre><code><span class="sh">$ pip install git+https://github.com/tandem-rng/tandem-mlx</span>
+import mlx.core as mx, tandem_mlx as tm
+key = tm.key(42)
+z = tm.normal(key, (1000,))         <span class="c"># Metal kernel on the GPU</span></code></pre></article>
+
+<article class="card"><header><h3>Haskell</h3><a href="https://github.com/tandem-rng/tandem-hs">tandem-hs</a></header>
+<pre><code><span class="sh">-- cabal.project: source-repository-package, location: https://github.com/tandem-rng/tandem-hs</span>
+import System.Random.Tandem qualified as T
+let g0 = T.seed 42
+    (x, g1) = T.nextDouble g0       <span class="c">-- value and next generator</span></code></pre></article>
+
+<article class="card"><header><h3>OCaml</h3><a href="https://github.com/tandem-rng/tandem-ml">tandem-ml</a></header>
+<pre><code><span class="sh">$ git clone https://github.com/tandem-rng/tandem-ml &amp;&amp; cd tandem-ml &amp;&amp; opam install . &amp;&amp; dune build</span>
+let g = Tandem.seed 42
+let x, g = Tandem.float g
+let worker = Tandem.split g 7       <span class="c">(* by index, from the key *)</span></code></pre></article>
 
   </div>
 </section>
