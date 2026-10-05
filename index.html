@@ -272,7 +272,7 @@ let worker = Tandem.split g 7       <span class="c">(* by index, from the key *)
     <thead><tr><th>port</th><th>hardware</th><th>Float64 uniform fill, GiB/s</th><th>Float64 normal fill, GiB/s</th><th>source</th></tr></thead>
     <tbody>
       <tr><td><a href="#c">tandem-c</a></td><td>Apple M4, one thread</td><td class="num"><strong>17.5</strong> <span class="c">std::mt19937_64 3.1</span></td><td class="num"><strong>7.7</strong></td><td><a href="https://github.com/tandem-rng/tandem-c/blob/121db59/docs/speed.md">docs/speed.md at 121db59</a></td></tr>
-      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4, 14 tasks</td><td class="num"><strong>87.3</strong></td><td class="num"><strong>33.1</strong> <span class="flag" title="Box-Muller, ziggurat pending">*</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/996f459/docs/src/performance.md">performance.md at 996f459</a></td></tr>
+      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4, one task</td><td class="num"><strong>17.4</strong> <span class="c">Xoshiro 20.2</span></td><td class="num"><strong>4.81</strong> <span class="flag" title="Box-Muller, ziggurat pending">*</span> <span class="c">Xoshiro 7.17</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/996f459/docs/src/performance.md">performance.md at 996f459</a></td></tr>
       <tr><td><a href="#cuda">tandem-cuda</a></td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1392</strong> <span class="c">cuRAND 795</span></td><td class="num"><strong>1065–1096</strong> <span class="c">cuRAND 597</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/4260acf/docs/speed.md">docs/speed.md at 4260acf</a></td></tr>
     </tbody>
   </table>
