@@ -72,7 +72,8 @@
       ? ` <span class="flag">*</span> Float64 normals move to a ziggurat, so these rows will change.`
       : "";
     const review = port.review ? `<strong>${esc(port.review)}</strong> ` : "";
-    notes.innerHTML = `${review}Source: ${sources.join(", ")}. The ratio is how many times faster Tandem runs than the baseline on the same hardware.${flagged}`;
+    const method = port.note ? `${esc(port.note)} ` : "";
+    notes.innerHTML = `${review}${method}Source: ${sources.join(", ")}. The ratio is how many times faster Tandem runs than the baseline on the same hardware.${flagged}`;
   }
 
   function fromHash(scroll) {

@@ -37,6 +37,8 @@
 2. Add its rows. The picker shows a port only when it has rows.
 3. For a port under review, add `"review"` with one sentence. The page shows it above the sources.
    Remove it when the review closes.
+4. For a method that applies to every row of a port, add `"note"` with the source page's own
+   wording, at most two sentences. The page shows it before the sources line.
 
 No page change is needed. Add only public repos.
 

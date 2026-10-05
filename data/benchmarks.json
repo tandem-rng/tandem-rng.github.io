@@ -8,7 +8,7 @@
     { "id": "c", "name": "C", "repo": "tandem-c" },
     { "id": "rust", "name": "Rust", "repo": "tandem-rs" },
     { "id": "numpy", "name": "NumPy", "repo": "tandem-numpy" },
-    { "id": "cuda", "name": "CUDA", "repo": "tandem-cuda" },
+    { "id": "cuda", "name": "CUDA", "repo": "tandem-cuda", "note": "Each row first runs its own fill for two seconds, then times 21 fills, and the table gives the median. The fastest lay at most 5 % above the median on every row." },
     { "id": "jax", "name": "JAX", "repo": "tandem-jax" },
     { "id": "r", "name": "R", "repo": "tandem-r" },
     { "id": "torch", "name": "PyTorch", "repo": "tandem-torch" },
