@@ -7,6 +7,9 @@
 - Take every figure from a port's committed docs: `docs/speed.md`, `docs/notes.md`, the README, or TandemRNG.jl's `docs/src/performance.md`.
 - Never copy a figure from a benchmark log, a chat, or a host under load. Never record host load.
 - Give a baseline only when the same table measures it on the same hardware and size.
+- Use only third-party generators as baselines, never our own code. PureRNGs.jl and every
+  Tandem port are ours. For Philox, use cuRAND on CUDA, Random123 in C and Julia, and NumPy's
+  `Philox` in Python.
 - Keep a row when Tandem loses. The page shows the ratio either way.
 - Label the Apple bench machine `Apple M4 Pro`, its sysctl brand string. Some port pages call it
   "M4". Copy their figures as they are, but keep the site's label.

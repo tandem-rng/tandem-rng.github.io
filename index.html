@@ -186,7 +186,7 @@ z = g.standard_normal(10**6)</code></pre></article>
 auto g = tandem::generator::seed(42);
 g.fill_f64(x, n);                   <span class="c">// x in device memory</span></code></pre></article>
 
-<article class="card"><header><h3>JAX</h3><a href="https://github.com/tandem-rng/tandem-jax">tandem-jax</a></header>
+<article class="card"><header><h3>JAX</h3><span class="refs"><a href="https://tandem-rng.github.io/tandem-jax/">Docs</a><a href="https://github.com/tandem-rng/tandem-jax">tandem-jax</a></span></header>
 <pre><code><span class="sh">$ pip install git+https://github.com/tandem-rng/tandem-jax</span>
 import jax, tandem_jax as tj
 key = tj.key(42)
@@ -274,7 +274,7 @@ let worker = Tandem.split g 7       <span class="c">(* by index, from the key *)
     <thead><tr><th>port</th><th>hardware</th><th>Float64 uniform fill, GiB/s</th><th>Float64 normal fill, GiB/s</th><th>source</th></tr></thead>
     <tbody>
       <tr><td><a href="#c">tandem-c</a></td><td>Apple M4 Pro, one thread</td><td class="num"><strong>16.1</strong> <span class="c">Philox4x32-10 2.3</span></td><td class="num"><strong>7.5</strong></td><td><a href="https://github.com/tandem-rng/tandem-c/blob/d9e1e54/docs/speed.md">docs/speed.md at d9e1e54</a></td></tr>
-      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4 Pro, one task</td><td class="num"><strong>17.7</strong> <span class="c">PureRNGs Philox4x32 4.80</span></td><td class="num"><strong>6.34</strong> <span class="c">PureRNGs Philox4x32 1.43</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/9165c0a/docs/src/performance.md">performance.md at 9165c0a</a></td></tr>
+      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4 Pro, one task</td><td class="num"><strong>17.7</strong> <span class="c">Random123 Philox4x32 1.83</span></td><td class="num"><strong>6.34</strong> <span class="c">Random123 Philox4x32 1.51</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/9165c0a/docs/src/performance.md">performance.md at 9165c0a</a></td></tr>
       <tr><td><a href="#cuda">tandem-cuda</a></td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1392</strong> <span class="c">cuRAND 795</span></td><td class="num"><strong>1065–1096</strong> <span class="c">cuRAND 597</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/4260acf/docs/speed.md">docs/speed.md at 4260acf</a></td></tr>
     </tbody>
   </table>
