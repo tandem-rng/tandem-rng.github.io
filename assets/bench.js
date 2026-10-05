@@ -50,13 +50,14 @@
         const lowerBetter = unitOf(r).startsWith("ns");
         const v = r.gib_s ?? r.value;
         const suffix = oneUnit ? "" : ` <span class="c">${esc(unitOf(r))}</span>`;
-        let base = `<span class="c" title="no baseline in the source">–</span>`;
-        if (r.baseline) {
-          const b = r.baseline.gib_s ?? r.baseline.value;
+        const vs = (bl) => {
+          const b = bl.gib_s ?? bl.value;
           const ratio = lowerBetter ? b / v : v / b;
           const cls = ratio >= 1 ? "win" : "loss";
-          base = `<span class="ratio ${cls}">${ratio.toFixed(ratio >= 10 ? 0 : 2)}×</span> <span class="base">${esc(r.baseline.name)}, ${fmt(b, r.baseline.gib_s_max)}</span>`;
-        }
+          return `<span class="ratio ${cls}">${ratio.toFixed(ratio >= 10 ? 0 : 2)}×</span> <span class="base">${esc(bl.name)}, ${fmt(b, bl.gib_s_max)}</span>`;
+        };
+        let base = `<span class="c" title="no baseline in the source">–</span>`;
+        if (r.baseline) base = vs(r.baseline) + (r.baseline_alt ? `<span class="alt">${vs(r.baseline_alt)}</span>` : "");
         html += `<tr><td class="draw"><code>${esc(r.draw)}</code>${flag}<span class="setup">${esc(r.setup)}</span></td>`
           + `<td class="num"><strong>${fmt(v, r.gib_s_max)}</strong>${suffix}</td><td>${base}</td></tr>`;
       }
