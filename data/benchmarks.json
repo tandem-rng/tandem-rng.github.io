@@ -228,11 +228,11 @@
     { "port": "haskell", "hardware": "Apple M4", "draw": "scalar Word64", "kind": "bits", "unit": "ns per value", "setup": "one thread, GHC 9.14.1, 2^20 draws", "value": 6.16, "baseline": { "name": "StdGen (SplitMix)", "value": 0.77 }, "source": { "path": "README.md", "commit": "9b83503" } },
     { "port": "haskell", "hardware": "Apple M4", "draw": "scalar normal Double", "kind": "normal", "f64_normal": true, "unit": "ns per value", "setup": "one thread, GHC 9.14.1, 2^20 draws", "value": 19.7, "baseline": { "name": "mwc-random 0.15", "value": 13.3 }, "source": { "path": "README.md", "commit": "9b83503" } },
 
-    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_u32", "kind": "bits", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 18.6, "source": { "path": "docs/speed.md", "commit": "be8ec07" } },
-    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_float", "kind": "uniform", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 16.4, "source": { "path": "docs/speed.md", "commit": "be8ec07" } },
-    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_below32, range 1000", "kind": "bounded", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 7.6, "source": { "path": "docs/speed.md", "commit": "be8ec07" } },
-    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_exponential", "kind": "exponential", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 6.0, "source": { "path": "docs/speed.md", "commit": "be8ec07" } },
-    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_normal", "kind": "normal", "f64_normal": true, "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 4.8, "source": { "path": "docs/speed.md", "commit": "be8ec07" } },
-    { "port": "ocaml", "hardware": "Apple M4", "draw": "Pure.fill_u32, pure OCaml fallback", "kind": "bits", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 1.3, "source": { "path": "docs/speed.md", "commit": "be8ec07" } }
+    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_u32", "kind": "bits", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 18.6, "source": { "path": "docs/speed.md", "commit": "47423a8" } },
+    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_float", "kind": "uniform", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 16.4, "source": { "path": "docs/speed.md", "commit": "47423a8" } },
+    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_below32, range 1000", "kind": "bounded", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 7.6, "source": { "path": "docs/speed.md", "commit": "47423a8" } },
+    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_exponential", "kind": "exponential", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 6.0, "source": { "path": "docs/speed.md", "commit": "47423a8" } },
+    { "port": "ocaml", "hardware": "Apple M4", "draw": "fill_normal", "kind": "normal", "f64_normal": true, "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements, Box-Muller", "gib_s": 4.8, "source": { "path": "docs/speed.md", "commit": "be8ec07" } },
+    { "port": "ocaml", "hardware": "Apple M4", "draw": "Pure.fill_u32, pure OCaml fallback", "kind": "bits", "setup": "one core, OCaml 5.5.1 flambda, 2^22 elements", "gib_s": 1.3, "source": { "path": "docs/speed.md", "commit": "47423a8" } }
   ]
 }
