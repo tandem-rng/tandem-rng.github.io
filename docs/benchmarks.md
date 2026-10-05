@@ -43,11 +43,10 @@ No page change is needed. Add only public repos.
 2. Update `gib_s` or `value`, both baselines and `source.commit` together, from one table. Update `source.path` when the doc moved.
 3. Run the check below. Then render the page at 1280 px and 400 px in both themes.
 
-Float64 normals are moving from Box-Muller to the ziggurat of SPEC.md Appendix A, tandem-c and tandem-cuda first.
-Refresh every row with `f64_normal: true` when its port lands the change. Set `ziggurat: true`
-on the row, add "ziggurat" to its `setup`, and point `source` at the commit whose docs carry the
-new figure. That can be the docs commit after the code commit.
-Keep `f64_normal`, so the next refresh can find the rows.
+Every port draws Float64 normals from the ziggurat of SPEC.md Appendix A, and every row with
+`f64_normal: true` carries `ziggurat: true`. Give a new Float64 normal row both fields and
+"ziggurat" in its `setup`. Point `source` at the commit whose docs carry the figure, which can
+be a docs commit after the code commit. Keep `f64_normal`, so a later refresh can find the rows.
 
 ## Check
 
