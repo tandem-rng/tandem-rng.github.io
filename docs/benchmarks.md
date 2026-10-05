@@ -8,13 +8,15 @@
 - Never copy a figure from a benchmark log, a chat, or a host under load. Never record host load.
 - Give a baseline only when the same table measures it on the same hardware and size.
 - Keep a row when Tandem loses. The page shows the ratio either way.
+- Label the Apple bench machine `Apple M4 Pro`, its sysctl brand string. Some port pages call it
+  "M4". Copy their figures as they are, but keep the site's label.
 
 ## Row fields
 
 | field | meaning |
 |---|---|
 | `port` | an `id` from `ports` |
-| `hardware` | the machine, for example `NVIDIA A100 40 GB` or `Apple M4`. Rows group by this string |
+| `hardware` | the machine, for example `NVIDIA A100 40 GB` or `Apple M4 Pro`. Rows group by this string |
 | `draw` | the call as the source names it |
 | `kind` | `uniform`, `bits`, `bounded`, `normal` or `exponential` |
 | `setup` | threads, element count, toolchain, as the source gives them |
