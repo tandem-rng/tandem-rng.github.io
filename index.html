@@ -85,6 +85,8 @@ th, td { text-align: left; padding: 0.55rem 0.75rem 0.55rem 0; border-bottom: 1p
 th { font-weight: 600; font-size: 0.85rem; color: var(--muted); }
 td.num { font-family: var(--mono); font-weight: 500; white-space: nowrap; }
 td.num strong { color: var(--ink); font-size: 1.05rem; }
+.headline td.num { white-space: normal; }
+.headline td.num .c { display: block; font-size: 0.8rem; }
 .note { color: var(--muted); font-size: 0.9rem; margin: 1rem 0 0; }
 
 h3.sub { font-size: 1.15rem; margin: 2.5rem 0 0.75rem; scroll-margin-top: 1rem; }
@@ -102,7 +104,7 @@ h3.sub { font-size: 1.15rem; margin: 2.5rem 0 0.75rem; scroll-margin-top: 1rem; 
 .bench .ratio { font-family: var(--mono); font-weight: 500; white-space: nowrap; }
 .bench .ratio.win { color: var(--ink); }
 .bench .ratio.loss { color: var(--muted); }
-.bench .flag { color: var(--pink); font-weight: 600; }
+.flag { color: var(--pink); font-weight: 600; }
 
 .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; }
 .how p { margin: 0.5rem 0 0; }
@@ -119,8 +121,9 @@ h3.sub { font-size: 1.15rem; margin: 2.5rem 0 0.75rem; scroll-margin-top: 1rem; 
   tbody tr { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
   td { border: 0; padding: 0; }
   td:first-child { grid-column: 1 / -1; font-weight: 600; }
-  .headline td.num:nth-child(3)::before { content: "Tandem "; font-family: var(--sans); font-weight: 400; color: var(--muted); }
-  .headline td:nth-child(3), .headline td:nth-child(5) { text-align: right; }
+  .headline td:nth-child(2), .headline td:nth-child(5) { grid-column: 1 / -1; }
+  .headline td:nth-child(3)::before { content: "uniform "; font-family: var(--sans); font-weight: 400; color: var(--muted); }
+  .headline td:nth-child(4)::before { content: "normal "; font-family: var(--sans); font-weight: 400; color: var(--muted); }
   .bench tr.group { display: block; padding: 0; border: 0; }
   .bench tr.group th { display: block; padding: 1.25rem 0 0.4rem; }
   .bench td:nth-child(3) { text-align: right; }
@@ -266,16 +269,15 @@ let worker = Tandem.split g 7       <span class="c">(* by index, from the key *)
   <h2>Speed</h2>
   <div class="table-wrap">
   <table class="headline">
-    <thead><tr><th>draw</th><th>hardware</th><th>Tandem, GiB/s</th><th>baseline, GiB/s</th><th>source</th></tr></thead>
+    <thead><tr><th>port</th><th>hardware</th><th>Float64 uniform fill, GiB/s</th><th>Float64 normal fill, GiB/s</th><th>source</th></tr></thead>
     <tbody>
-      <tr><td>Float64 fill</td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1392</strong></td><td class="num">795 <span class="c">cuRAND Philox</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/main/docs/speed.md">tandem-cuda</a></td></tr>
-      <tr><td><code>randn</code> float32</td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1133</strong></td><td class="num">774 <span class="c">torch.randn</span></td><td><a href="https://github.com/tandem-rng/tandem-torch/blob/main/docs/speed.md">tandem-torch</a></td></tr>
-      <tr><td>Float64 fill, one thread</td><td>Apple M4</td><td class="num"><strong>17.5</strong></td><td class="num">3.1 <span class="c">std::mt19937_64</span></td><td><a href="https://github.com/tandem-rng/tandem-c/blob/main/docs/speed.md">tandem-c</a></td></tr>
-      <tr><td><code>standard_normal</code> float64, one thread</td><td>Apple M4</td><td class="num"><strong>7.7</strong></td><td class="num">2.0 <span class="c">NumPy PCG64</span></td><td><a href="https://github.com/tandem-rng/tandem-numpy">tandem-numpy</a></td></tr>
+      <tr><td><a href="#c">tandem-c</a></td><td>Apple M4, one thread</td><td class="num"><strong>17.5</strong> <span class="c">std::mt19937_64 3.1</span></td><td class="num"><strong>7.7</strong></td><td><a href="https://github.com/tandem-rng/tandem-c/blob/121db59/docs/speed.md">docs/speed.md at 121db59</a></td></tr>
+      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4, 14 tasks</td><td class="num"><strong>87.3</strong></td><td class="num"><strong>33.1</strong> <span class="flag" title="Box-Muller, ziggurat pending">*</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/996f459/docs/src/performance.md">performance.md at 996f459</a></td></tr>
+      <tr><td><a href="#cuda">tandem-cuda</a></td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1392</strong> <span class="c">cuRAND 795</span></td><td class="num"><strong>1065–1096</strong> <span class="c">cuRAND 597</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/4260acf/docs/speed.md">docs/speed.md at 4260acf</a></td></tr>
     </tbody>
   </table>
   </div>
-  <p class="note">GiB/s written to memory. The A100 fill runs at the card's memory bandwidth. Each source gives the method, sizes and more rows.</p>
+  <p class="note">GiB/s written to memory, with the baseline from the same page where it has one. The A100 fills run near the card's memory bandwidth. <span class="flag">*</span> TandemRNG.jl's Float64 normals still use Box-Muller, and its ziggurat figure is pending.</p>
 
   <h3 class="sub" id="bench">Every port</h3>
   <nav class="picker" id="bench-picker" aria-label="Port"></nav>
