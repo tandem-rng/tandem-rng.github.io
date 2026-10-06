@@ -274,7 +274,7 @@ let worker = Tandem.split g 7       <span class="c">(* by index, from the key *)
     <thead><tr><th>port</th><th>hardware</th><th>Float64 uniform fill, GiB/s</th><th>Float64 normal fill, GiB/s</th><th>source</th></tr></thead>
     <tbody>
       <tr><td><a href="#c">tandem-c</a></td><td>Apple M4 Pro, one thread</td><td class="num"><strong>16.3</strong> <span class="c">Philox4x32-10 2.3</span></td><td class="num"><strong>7.6</strong></td><td><a href="https://github.com/tandem-rng/tandem-c/blob/a50f9bd/docs/speed.md">docs/speed.md at a50f9bd</a></td></tr>
-      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4 Pro, one task</td><td class="num"><strong>17.2</strong> <span class="c">Random123 Philox4x32 1.81</span></td><td class="num"><strong>7.74</strong> <span class="c">Random123 Philox4x32 1.49</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/5714667/docs/src/performance.md">performance.md at 5714667</a></td></tr>
+      <tr><td><a href="#julia">TandemRNG.jl</a></td><td>Apple M4 Pro, one task</td><td class="num"><strong>17.2</strong> <span class="c">Xoshiro 19.8</span></td><td class="num"><strong>7.74</strong> <span class="c">Xoshiro 7.19</span></td><td><a href="https://github.com/tandem-rng/TandemRNG.jl/blob/5714667/docs/src/performance.md">performance.md at 5714667</a></td></tr>
       <tr><td><a href="#cuda">tandem-cuda</a></td><td>NVIDIA A100 40 GB</td><td class="num"><strong>1387</strong> <span class="c">cuRAND 780</span></td><td class="num"><strong>1060</strong> <span class="c">cuRAND 562</span></td><td><a href="https://github.com/tandem-rng/tandem-cuda/blob/6ad0817/docs/speed.md">docs/speed.md at 6ad0817</a></td></tr>
     </tbody>
   </table>
