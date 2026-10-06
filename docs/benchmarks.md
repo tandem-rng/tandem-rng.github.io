@@ -15,6 +15,8 @@
 - Put the fastest third-party generator the source measures for the row first, a noncrypto one
   when there is a choice. Give every A100 row cuRAND Philox4x32-10. Where cuRAND has no exact
   counterpart, the source names the nearest call, and the row's `setup` says so.
+- Where another baseline has no matching draw and the source compares with its raw words or
+  uniforms, end the baseline `name` with ` *` and quote the source's explanation in the port `note`.
 - Keep a row when Tandem loses. The page shows the ratio either way.
 - Label the Apple bench machine `Apple M4 Pro`, its sysctl brand string. Some port pages call it
   "M4". Copy their figures as they are, but keep the site's label.
