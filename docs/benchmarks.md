@@ -10,6 +10,11 @@
 - Use only third-party generators as baselines, never our own code. PureRNGs.jl and every
   Tandem port are ours. For Philox, use cuRAND on CUDA, Random123 in C and Julia, and NumPy's
   `Philox` in Python.
+- Give every figure in GiB/s of output, scalar draws included. A port moves a row to GiB/s by
+  remeasuring it, so never take a figure converted from a time per value.
+- Put the fastest third-party generator the source measures for the row first, a noncrypto one
+  when there is a choice. Give every A100 row cuRAND Philox4x32-10. Where cuRAND has no exact
+  counterpart, the source names the nearest call, and the row's `setup` says so.
 - Keep a row when Tandem loses. The page shows the ratio either way.
 - Label the Apple bench machine `Apple M4 Pro`, its sysctl brand string. Some port pages call it
   "M4". Copy their figures as they are, but keep the site's label.
@@ -24,9 +29,8 @@
 | `kind` | `uniform`, `bits`, `bounded`, `normal` or `exponential` |
 | `setup` | threads, element count, toolchain, as the source gives them |
 | `gib_s`, `gib_s_max` | GiB/s written. Use `gib_s_max` for a range |
-| `unit`, `value` | instead of `gib_s` when the source uses another unit, for example `ns per value`. A unit that starts with `ns` counts as faster when smaller |
-| `baseline` | optional `{ name, gib_s, gib_s_max }`, or `{ name, value }` in the row's `unit`. On CPU rows prefer Philox when the source measures it, because it is the generator of the GPU libraries |
-| `baseline_alt` | optional second baseline in the same shape, for example PCG64 next to Philox. The page shows its ratio under the first |
+| `baseline` | optional `{ name, gib_s, gib_s_max }`, the fastest third-party generator for the row |
+| `baseline_alt` | optional second baseline in the same shape, for example Philox next to PCG64. The page shows its ratio under the first |
 | `f64_normal` | `true` on Float64 normal rows |
 | `ziggurat` | `true` once a Float64 normal row is measured with the ziggurat. The page marks the other Float64 normal rows as pending |
 | `source` | `{ path, commit }`. The commit is the port's `origin/main` short hash when you read the file |
@@ -45,7 +49,7 @@ No page change is needed. Add only public repos.
 ## Refresh rows
 
 1. Run `git fetch` in the port checkout and read the speed doc at `origin/main`.
-2. Update `gib_s` or `value`, both baselines and `source.commit` together, from one table. Update `source.path` when the doc moved.
+2. Update `gib_s`, both baselines and `source.commit` together, from one table. Update `source.path` when the doc moved.
 3. Run the check below. Then render the page at 1280 px and 400 px in both themes.
 
 Every port draws Float64 normals from the ziggurat of SPEC.md Appendix A, and every row with
@@ -59,8 +63,8 @@ Run this in the directory above the port checkouts. It prints each number that i
 
 ```sh
 jq -r '(.ports|map({(.id):.repo})|add) as $R | .rows[] | . as $x
-  | [$x.gib_s, $x.gib_s_max, $x.value, $x.baseline.gib_s, $x.baseline.gib_s_max, $x.baseline.value,
-     $x.baseline_alt.gib_s, $x.baseline_alt.gib_s_max, $x.baseline_alt.value][]
+  | [$x.gib_s, $x.gib_s_max, $x.baseline.gib_s, $x.baseline.gib_s_max,
+     $x.baseline_alt.gib_s, $x.baseline_alt.gib_s_max][]
   | select(. != null)
   | [$R[$x.port], $x.source.commit, $x.source.path, tostring] | @tsv' \
   tandem-rng.github.io/data/benchmarks.json |
